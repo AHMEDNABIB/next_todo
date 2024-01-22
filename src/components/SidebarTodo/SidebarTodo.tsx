@@ -1,10 +1,11 @@
 "use client";
 
 import type { CustomFlowbiteTheme } from "flowbite-react";
-import { Sidebar } from "flowbite-react";
+import { Sidebar, Button, Modal } from "flowbite-react";
 import { BsListCheck } from "react-icons/bs";
 import { FaClipboardList, FaRegStar, FaRegThumbsUp } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { useState } from "react";
 
 import Link from "next/link";
 import ModalTodo from "./AddTodoModal";
@@ -12,6 +13,7 @@ import ModalTodo from "./AddTodoModal";
 const customTheme: CustomFlowbiteTheme = {};
 
 export default function SidbarTodo() {
+	const [openModal, setOpenModal] = useState(false);
 	return (
 		<Sidebar
 			className=" mx-3 rounded-lg   border-2 bg-white border-gray-200 "
@@ -29,25 +31,25 @@ export default function SidbarTodo() {
 							<Sidebar.Item className="text-md">
 								<div className="flex gap-3 items-center">
 									<BsListCheck />
-									<Link href="/">Inbox</Link>
+									Inbox
 								</div>
 							</Sidebar.Item>
 							<Sidebar.Item className="text-sm ">
 								<div className="flex gap-3 items-center">
 									<FaRegThumbsUp />
-									<Link href="/">Done</Link>
+									Done
 								</div>
 							</Sidebar.Item>
 							<Sidebar.Item>
 								<div className="flex gap-3 items-center">
 									<FaRegStar />
-									<Link href="/">Important</Link>
+									Important
 								</div>
 							</Sidebar.Item>
 							<Sidebar.Item>
 								<div className="flex gap-3 items-center">
 									<FaRegTrashCan />
-									<Link href="/">Done</Link>
+									Done
 								</div>
 							</Sidebar.Item>
 						</Sidebar.ItemGroup>
@@ -58,7 +60,7 @@ export default function SidbarTodo() {
 							</Sidebar.Item>
 
 							<Sidebar.Item className=" hover:translate-x-6 transition duration-700 ease-in-out">
-								<div className="flex gap-1 items-center">
+								<div className="flex gap-1 items-center text-green-600">
 									<svg
 										width="24"
 										height="24"
@@ -72,14 +74,12 @@ export default function SidbarTodo() {
 											stroke-width=".5"
 										/>
 									</svg>
-									<Link href="/" className="text-green-600">
-										Team
-									</Link>
+									Team
 								</div>
 							</Sidebar.Item>
 
 							<Sidebar.Item className=" hover:translate-x-6 transition duration-700 ease-in-out">
-								<div className="flex gap-1 items-center">
+								<div className="flex gap-1 items-center text-yellow-800">
 									<svg
 										width="24"
 										height="24"
@@ -93,14 +93,12 @@ export default function SidbarTodo() {
 											stroke-width=".5"
 										/>
 									</svg>
-									<Link href="/" className="text-yellow-800">
-										Low
-									</Link>
+									Low
 								</div>
 							</Sidebar.Item>
 
 							<Sidebar.Item className=" hover:translate-x-6 transition duration-700 ease-in-out">
-								<div className="flex gap-1 items-center">
+								<div className="flex gap-1 items-center text-blue-800">
 									<svg
 										width="24"
 										height="24"
@@ -114,14 +112,12 @@ export default function SidbarTodo() {
 											stroke-width=".5"
 										/>
 									</svg>
-									<Link href="/" className="text-blue-800">
-										Medium
-									</Link>
+									Medium
 								</div>
 							</Sidebar.Item>
 
 							<Sidebar.Item className=" hover:translate-x-6 transition duration-700 ease-in-out">
-								<div className="flex gap-1 items-center">
+								<div className="flex gap-1 items-center text-red-600">
 									<svg
 										width="24"
 										height="24"
@@ -135,14 +131,12 @@ export default function SidbarTodo() {
 											stroke-width=".5"
 										/>
 									</svg>
-									<Link href="/" className="text-red-600">
-										High
-									</Link>
+									High
 								</div>
 							</Sidebar.Item>
 
 							<Sidebar.Item className=" hover:translate-x-6 transition duration-700 ease-in-out">
-								<div className="flex gap-1 items-center">
+								<div className="flex gap-1 items-center text-emerald-300">
 									<svg
 										width="24"
 										height="24"
@@ -156,21 +150,55 @@ export default function SidbarTodo() {
 											stroke-width=".5"
 										/>
 									</svg>
-									<Link href="/" className="text-emerald-300">
-										Update
-									</Link>
+									Update
 								</div>
 							</Sidebar.Item>
-
-							{/* grpup */}
 						</Sidebar.ItemGroup>
-
-						{/* ex */}
 					</div>
 
 					<Sidebar.ItemGroup>
 						<Sidebar.Item>
-							<ModalTodo />
+							<Button className="" onClick={() => setOpenModal(true)}>
+								Toggle modal
+							</Button>
+							<Modal
+								show={openModal}
+								onClose={() => setOpenModal(false)}>
+								<Modal.Header>Terms of Service</Modal.Header>
+								<Modal.Body>
+									<div className="space-y-6">
+										<p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+											With less than a month to go before
+											the European Union enacts new
+											consumer privacy laws for its
+											citizens, companies around the world
+											are updating their terms of service
+											agreements to comply.
+										</p>
+										<p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+											The European Union’s General Data
+											Protection Regulation (G.D.P.R.)
+											goes into effect on May 25 and is
+											meant to ensure a common set of data
+											rights in the European Union. It
+											requires organizations to notify
+											users as soon as possible of
+											high-risk data breaches that could
+											personally affect them.
+										</p>
+									</div>
+								</Modal.Body>
+								<Modal.Footer>
+									<Button onClick={() => setOpenModal(false)}>
+										I accept
+									</Button>
+									<Button
+										color="gray"
+										onClick={() => setOpenModal(false)}>
+										Decline
+									</Button>
+								</Modal.Footer>
+							</Modal>
 						</Sidebar.Item>
 					</Sidebar.ItemGroup>
 				</div>

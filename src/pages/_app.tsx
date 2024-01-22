@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 
 
 import SidebarTodo from "@/components/SidebarTodo/SidebarTodo"
+import { ModalProvider } from '@/context/ModalContext';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,16 +20,16 @@ export const metadata: Metadata = {
 function App({ Component, pageProps }: AppProps) {
     
   return (
-    <SessionProvider session={pageProps.session}>
-
-    <div className={inter.className}>	
-        <div className="flex gap-4 mt-4 ">
-          <SidebarTodo />
-          <Component {...pageProps} />
-        </div>
-    </div>
-      
-    </SessionProvider>
+		<SessionProvider session={pageProps.session}>
+			<div className={inter.className}>
+				<ModalProvider>
+					<div className="flex gap-4 mt-4 ">
+						<SidebarTodo />
+						<Component {...pageProps} />
+					</div>
+				</ModalProvider>
+			</div>
+		</SessionProvider>
   );
 }
 
