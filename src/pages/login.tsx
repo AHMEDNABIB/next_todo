@@ -12,34 +12,29 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
 
 
-  console.log(session);
+  // console.log(session);
 
 
-    const handleLogin = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/user/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        });
+  const handleLogin = async () => {
+    try {
+      const result = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      });
   
-        if (response.ok) {
-          const data = response.json;
-          console.log(data);
-          console.log('Login successful');
-          router.push('/');
-        } else {
-          console.error('Login failed');
-        }
-      } catch (error) {
-        console.error('Error during login:', error);
+      if (result && !result.error) {
+        console.log('Login successful');
+        console.log(result);
+        router.push('/');
+      } else {
+        console.error('Login failed:', result?.error || 'Unknown error');
       }
-    };
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 w-full">
@@ -108,16 +103,13 @@ const Login = () => {
           <div className="flex-1 border-t-2 border-gray-400"></div>
         </div>
         <div className="mt-6 flex flex-col items-center justify-between">
-        <div className="w-full bg-blue-500 text-blue py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center mb-2">
-          <button onClick={() => signIn('facebook')}>Log in with Facebook</button>
-        </div>
-        <div className="w-full bg-blue-500 text-blue py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center">
-  <button onClick={() => signIn('google')}>Log in with Google</button>
-</div>
-
-      </div>
-
-        
+          <div className="w-full bg-blue-500 text-blue py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center mb-2">
+            <button onClick={() => signIn('facebook')}>Log in with Facebook</button>
+          </div>
+          <div className="w-full bg-blue-500 text-blue py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center">
+          <button onClick={() => signIn('google')}>Log in with Google</button>
+          </div>
+        </div>        
       </div>
     </div>
   );
