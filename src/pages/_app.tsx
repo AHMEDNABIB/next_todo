@@ -23,7 +23,7 @@ function App({ Component, pageProps }: AppProps) {
 
     <div className={inter.className}>	
         <div className="flex gap-4 mt-4 ">
-          <SidebarTodo />
+          {/* <SidebarTodo /> */}
           <Component {...pageProps} />
         </div>
     </div>
