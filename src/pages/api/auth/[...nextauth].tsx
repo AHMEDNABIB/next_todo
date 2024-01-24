@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import FacebookProvider from 'next-auth/providers/facebook';
 import CredentialsProvider from "next-auth/providers/credentials";
+import { NextApiRequest, NextApiResponse } from 'next';
 
 type User = {
   email: string;
@@ -36,10 +37,10 @@ export const authOptions = {
     
           if (response.ok) {
             const data = await response.json();
+            console.log(data);
             const accessToken = data.accessToken;
-            console.log('access Token:' , accessToken);
-            console.log('Login successful');
-            return(data);
+            
+            return data;
           } else {
             console.error('Login failed');
             return null;
@@ -59,7 +60,46 @@ export const authOptions = {
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
     }),
   ],
-  secret: process.env.JWT_SECRET,
+  // secret: process.env.JWT_SECRET,
 };
 
-export default NextAuth(authOptions);
+const callbacks = {
+  jwt: ({ token, user, trigger, session }: any) => {
+    if (trigger === 'update') {
+      // eslint-disable-next-line no-param-reassign
+      token = { ...token, ...session };
+    }
+
+    if (user) {
+      // eslint-disable-next-line no-param-reassign
+      token = { ...token, ...user.data };
+    }
+
+    return token;
+  },
+  session: ({ session, token }: any) => {
+    // console.log(session);
+
+    if (token) {
+      // eslint-disable-next-line no-param-reassign
+      session = { ...session, user: token };
+    }
+
+    return session;
+  },
+};
+
+const options = {
+  providers: authOptions.providers,
+  callbacks,
+
+  pages: {
+    signIn: '/login',
+    error: '/login',
+  },
+};
+
+const authHandler = (req: NextApiRequest, res: NextApiResponse) =>
+  NextAuth(req, res, options);
+
+export default authHandler;
