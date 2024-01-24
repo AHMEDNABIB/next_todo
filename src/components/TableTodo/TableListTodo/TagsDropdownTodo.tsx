@@ -3,7 +3,7 @@
 
 import { Dropdown , Button } from "flowbite-react";
 
-export default function DropdownTodo() {
+export default function DropdownTodo({data}) {
 	return (
 		<>
 			<Dropdown
@@ -11,7 +11,7 @@ export default function DropdownTodo() {
 				dismissOnClick={false}
 				renderTrigger={() => (
 					<span className="text-green-600 border text-semibold  text-xs  hover:bg-green-600 hover:text-white border-green-400 h-8 rounded-full px-3 py-2 cursor-pointer outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 ">
-						Medium
+						{data}
 					</span>
 				)}>
 				<Dropdown.Item>Team</Dropdown.Item>

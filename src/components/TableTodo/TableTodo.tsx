@@ -10,8 +10,9 @@ import {
 	Modal
 } from "flowbite-react";
 import { useState } from "react";
+import useSWR from "swr";
 
-import Image from "next/image";
+
 import ActionDropdownTodo from "@/components/TableTodo/TableListTodo/ActionDropdownTodo"
 import SearchTodo from "@/components/TableTodo/TableHeader/SerarchTodo"
 import PaginationTodo from "@/components/TableTodo/TableHeader/PaginationTodo";
@@ -24,29 +25,50 @@ import PriorityDropdownTodo from "@/components/TableTodo/TableListTodo/PriorityD
 import { useModal } from "@/context/ModalContext";
 
 
+type ValueType = string | number;
 
 
-function TableTodo({result}) {
+function TableTodo({result, mutate}) {
 
 	
 	const { status, startTodo, endTodo, totalTodo, data } = result;
-	
+
 	const [openModal, setOpenModal] = useState(false);
 	
 	const [checked, setChecked] = useState([]);
 
-		const handleCheck = (event) => {
-		let updatedList = [...checked];
-		if (event.target.checked) {
-			updatedList = [...checked, event.target.value];
-		} else {
-			updatedList.splice(checked.indexOf(event.target.value), 1);
-		}
-		setChecked(updatedList);
+	const [record, setRecord] = useState({ })
+
+	console.log(checked)
+
+	
+
+     const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+			let updatedList = [...checked];
+			if (event.target.checked) {
+				updatedList = [...checked, event.target.value as ValueType];
+			} else {
+				updatedList.splice(checked.indexOf(event.target.value), 1);
+			}
+			setChecked(updatedList);
 		};
 
-	 const	isChecked = (item) =>
-        checked.includes(item) ? "line-through" : "";
+	 const	isChecked = (item :boolean) =>
+		checked.includes(item) ? "line-through" : "";
+	
+	
+	const  showDetail =  (id :string) => {
+		  fetch(`http://localhost:5000/todos/${id}`)
+			.then((resposne) => resposne.json())
+			.then((res)=>setRecord(res.data))
+
+		setOpenModal(true);
+		
+			
+		
+		  
+	};
+
 		
   return (
 		<>
@@ -70,7 +92,7 @@ function TableTodo({result}) {
 								</TableCell>
 
 								<TableCell
-									// onClick={() => setOpenModal(true)}
+									onClick={() => showDetail(todo._id)}
 									className="whitespace-nowrap font-medium text-gray-900 dark:text-white mr-24 ">
 									<h1 className={isChecked(todo._id)}>
 										{todo.title}
@@ -83,15 +105,22 @@ function TableTodo({result}) {
 								</TableCell>
 
 								<TableCell className="flex justify-end gap-2 items-center mt-4">
-									<TagsDropdownTodo />
-									<PriorityDropdownTodo />
+									<TagsDropdownTodo data={todo.tags} />
+									<PriorityDropdownTodo
+										data={todo.priority}
+									/>
 								</TableCell>
-								<TableCell className={isChecked(todo._id)} >
+								<TableCell className={isChecked(todo._id)}>
 									Jan, 17 2024
 								</TableCell>
 
 								<TableCell>
-									<ActionDropdownTodo />
+									<ActionDropdownTodo
+										data={todo._id}
+										isImportant={todo.isImportant}
+										isDeleted={todo.isDeleted}
+										mutate={mutate}
+									/>
 								</TableCell>
 							</TableRow>
 						))}
@@ -100,7 +129,7 @@ function TableTodo({result}) {
 			</div>
 
 			<Modal show={openModal} onClose={() => setOpenModal(false)}>
-				<ViewModalTodo />
+				<ViewModalTodo data={record} />
 			</Modal>
 		</>
   );
