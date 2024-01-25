@@ -9,7 +9,7 @@ export default function DropdownTodo({ tags, id, mutate }) {
 	const handleSelectOption = (option) => {
 		console.log(typeof option);
 
-		fetch(`http://localhost:5000/todos/tags/${id}`, {
+		fetch(`http://localhost:3001/todos/tags/${id}`, {
 			method: "PATCH",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({

@@ -1,12 +1,12 @@
 'use client'
 
-
-import { Inter } from "next/font/google";
 import TableTodo from "@/components/TableTodo/TableTodo";
+import SidebarTodo from "@/components/SidebarTodo/SidebarTodo"
 import useSWR from 'swr'
 
+import React, { useState } from 'react';
 
-const url = "http://localhost:5000/todos";
+
 
 const fetcher = (url: string) =>
 	fetch(url, {
@@ -17,8 +17,16 @@ const fetcher = (url: string) =>
 
 export default function Home() {
 
+	const [status, setStatus] = useState("inprogress");
 
-  const { data: result, mutate, error} = useSWR(url, fetcher);
+	console.log(status)
+
+	const url = `http://localhost:3001/todos/status/${status}`;
+
+
+	const { data: result, mutate, error } = useSWR(url, fetcher);
+	
+	// console.log(result)
 
    if (error) {
 		return <p>Error: {error.message}</p>;
@@ -29,9 +37,11 @@ export default function Home() {
    }
 
   return (
-   
 		<main>
-      <TableTodo result={result} mutate={mutate} />   
+			<div className="flex gap-4 mt-4 ">
+				<SidebarTodo onStatusChange={setStatus} />
+				<TableTodo result={result} mutate={mutate} />
+			</div>
 		</main>
-	);
+  );
 }
