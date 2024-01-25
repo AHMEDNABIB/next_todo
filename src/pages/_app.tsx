@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 function App({ Component, pageProps }: AppProps) {
     
   return (
+
 		<SessionProvider session={pageProps.session}>
 			<div className={inter.className}>
 				<ModalProvider>
