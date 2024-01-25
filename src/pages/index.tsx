@@ -1,23 +1,37 @@
-import Image from "next/image";
+'use client'
+
+
 import { Inter } from "next/font/google";
 import TableTodo from "@/components/TableTodo/TableTodo";
+import useSWR from 'swr'
 
-import { Checkbox, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
 
+const url = "http://localhost:5000/todos";
 
-const inter = Inter({ subsets: ["latin"] });
+const fetcher = (url: string) =>
+	fetch(url, {
+		headers: {
+			"content-type": "application/json",
+		},
+	}).then((res) => res.json());
 
 export default function Home() {
-  
-  const {data: session}=useSession();
-console.log(session);
-  return (
-    <main>
-     <TableTodo />
-      
-     
-      
 
+
+  const { data: result, mutate, error} = useSWR(url, fetcher);
+
+   if (error) {
+		return <p>Error: {error.message}</p>;
+   }
+
+   if (!result) {
+		return <p>Loading...</p>;
+   }
+
+  return (
+   
+		<main>
+      <TableTodo result={result} mutate={mutate} />   
 		</main>
-  );
+	);
 }

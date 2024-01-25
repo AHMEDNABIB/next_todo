@@ -1,11 +1,11 @@
 "use client";
 
-import { useModal } from "@/context/ModalContext";
 import { Button } from "flowbite-react";
+import { useState } from "react";
 import MainModal from "../Common/Modal";
 
 export default function ModalTodo() {
-	const { openModal, setOpenModal } = useModal();
+	const [openModal, setOpenModal] = useState(false);
 
 	return (
 		<div>
