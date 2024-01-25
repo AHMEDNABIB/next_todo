@@ -1,56 +1,72 @@
 "use client";
 import React, { useState } from 'react';
-import { useSession, signIn } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { FaFacebook,FaDiscord } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import Link from 'next/link';
 
-const Login = () => {
+const SignUp = () => {
   const router = useRouter();
-  const {data: session}=useSession();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
 
-
-
-  const handleLogin = async () => {
+  const handleSignUp = async () => {
     try {
-      const result = await signIn('credentials', {
-        redirect: false,
-        email,
-        password,
-      });
+        const response = await fetch('http://localhost:3001/api/user/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name:name,
+            email:email,
+            password:password
+          }),
+        });
   
-      if (result && !result.error) {
-        console.log('Login successful');
-        console.log(result);
-        router.push('/');
-      } else {
-        console.error('Login failed:', result?.error || 'Unknown error');
+        if (response.ok) {
+            router.push('/login');
+        } else {
+          console.error('Login failed');
+          return null;
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        return null;
       }
-    } catch (error) {
-      console.error('Error during login:', error);
-    }
   };
   
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 w-full">
       <div className="bg-white p-20 rounded shadow-md w-2/5">
-        <h2 className="text-2xl font-bold mb-6 flex items-center justify-center">Login to your account</h2>
+        <h2 className="text-2xl font-bold mb-6 flex items-center justify-center">Create new account</h2>
         <form>
           <div className="mb-4">
+            <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
+              Name
+            </label>
+            <input
+              type="email"
+              id="name"
+              name="name"
+              className="w-full border rounded-md p-2"
+              placeholder="name"
+              value={name}
+              onChange={(e)=>setName(e.target.value)}
+            />
+          </div>
+          <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
-              Your email
+              Email
             </label>
             <input
               type="email"
               id="email"
               name="email"
               className="w-full border rounded-md p-2"
-              placeholder="Enter your email"
+              placeholder="Your email"
               value={email}
               onChange={(e)=>setEmail(e.target.value)}
             />
@@ -64,42 +80,25 @@ const Login = () => {
               id="password"
               name="password"
               className="w-full border rounded-md p-2"
-              placeholder="Enter your password"
+              placeholder="Add password"
               value={password}
               onChange={(e)=>setPassword(e.target.value)}
             /> 
-          </div>
-          <div className="flex">
-            <div className="mb-4 flex items-center">
-              <input
-                type="checkbox"
-                id="rememberMe"
-                name="rememberMe"
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
-              />
-              <label htmlFor="rememberMe" className="text-gray-700 ml-2">
-                Remember me
-              </label>
-            </div>
-            <div className="mb-4 text-blue-500 hover:underline cursor-pointer ml-auto">
-              <a href="">Forgot Password?</a>
-            </div>
           </div>
           <button
             type="submit"
             className="bg-green-400 text-white py-2 px-4 rounded-md hover:bg-green-500 w-full"
             onClick={(e)=>{
               e.preventDefault();
-              handleLogin();
+              handleSignUp();
             }}
           >
-            Login
+            Create Account
           </button>
         </form>
         <div className="mt-6 flex items-center">
           <div className="flex-1 border-t-2 border-gray-400"></div>
-          <p className="mx-4 text-black-500">Log in with</p>
+          <p className="mx-4 text-black-500">sign in with</p>
           <div className="flex-1 border-t-2 border-gray-400"></div>
         </div>
         <div className="mt-6 flex flex-col items-center justify-between">
@@ -113,7 +112,7 @@ const Login = () => {
           <button className="flex items-center" onClick={() => signIn('discord', { callbackUrl: '/' })}><FaDiscord className="mr-2 text-blue-600" /> Discord</button>
           </div>
           <div className="mt-4 text-blue-500 hover:underline cursor-pointer">
-            <Link href="/signup">create new account?</Link>
+            <Link href="/login">already have an account?</Link>
           </div>
         </div>        
       </div>
@@ -122,4 +121,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
