@@ -20,8 +20,6 @@ export default function Home() {
 
   const { data: result, mutate, error} = useSWR(url, fetcher);
 
-//    console.log(result);
-
    if (error) {
 		return <p>Error: {error.message}</p>;
    }
@@ -29,8 +27,6 @@ export default function Home() {
    if (!result) {
 		return <p>Loading...</p>;
    }
-
-  //  console.log(result);
 
   return (
    

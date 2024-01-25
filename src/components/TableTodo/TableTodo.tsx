@@ -32,38 +32,41 @@ function TableTodo({result, mutate}) {
 
 	const [openModal, setOpenModal] = useState(false);
 	
-     const [checkedItems, setCheckedItems] = useState({});
+     const [checkedItems, setCheckedItems] = useState([]);
 
 	const [record, setRecord] = useState({})
 
-	const [items, setItems] = useState([]);
 
-  const handleCheckboxChange = (id) => {
-    setCheckedItems(prevState => ({
-      ...prevState,
-      [id]: !prevState[id]
-    }));
-  };
+	const handleCheckboxChange = (id) => {
+		setCheckedItems(prevState => ({
+		...prevState,
+		[id]: !prevState[id]
+		}));
 
-	
-	
-	
 
-	
+		//  handleUpdateData(id);
+	};
 
-    //  const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
-	// 		let updatedList = [...checked];
-	// 		if (event.target.checked) {
-	// 			updatedList = [...checked, event.target.value as ValueType];
-	// 		} else {
-	// 			updatedList.splice(checked.indexOf(event.target.value), 1);
-	// 		}
-	// 		setChecked(updatedList);
-	// 	};
+	console.log(checkedItems)
 
-	//  const	isChecked = (item :boolean) =>
-	// 	checked.includes(item) ? "line-through" : "";
-	
+
+
+// 	const handleUpdateData = (id) => {
+//     const option = checkedItems[id];
+
+//     fetch(`localhost:5000/todos/done/${id}`, {
+//       method: "PATCH",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         isDone: option,
+//       }),
+//     })
+//     .then((res) => res.json())
+//     .then((data) => {
+//       console.log(data);
+//     });
+//   };
+
 	
 	const  showDetail =  (id :string) => {
 		  fetch(`http://localhost:5000/todos/${id}`)
