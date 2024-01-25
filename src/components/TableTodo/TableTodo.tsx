@@ -37,7 +37,7 @@ function TableTodo({result, mutate}) {
 	const [record, setRecord] = useState({})
 
 
-	const handleCheckboxChange = (id) => {
+	const handleCheckboxChange = (id :string) => {
 		setCheckedItems(prevState => ({
 		...prevState,
 		[id]: !prevState[id]
