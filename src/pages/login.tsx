@@ -12,8 +12,6 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
 
 
-  // console.log(session);
-
 
   const handleLogin = async () => {
     try {
@@ -104,10 +102,13 @@ const Login = () => {
         </div>
         <div className="mt-6 flex flex-col items-center justify-between">
           <div className="w-full bg-blue-500 text-blue py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center mb-2">
-            <button onClick={() => signIn('facebook')}>Log in with Facebook</button>
+            <button onClick={() => signIn('facebook', { callbackUrl: '/' })}>Log in with Facebook</button>
+          </div>
+          <div className="w-full bg-blue-500 text-blue py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center mb-2">
+          <button onClick={() => signIn('google', { callbackUrl: '/' })}>Log in with Google</button>
           </div>
           <div className="w-full bg-blue-500 text-blue py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center">
-          <button onClick={() => signIn('google')}>Log in with Google</button>
+          <button onClick={() => signIn('discord', { callbackUrl: '/' })}>Log in with Discord</button>
           </div>
         </div>        
       </div>

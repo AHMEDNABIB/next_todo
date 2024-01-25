@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import FacebookProvider from 'next-auth/providers/facebook';
+import DiscordProvider from "next-auth/providers/discord";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -37,8 +38,6 @@ export const authOptions = {
     
           if (response.ok) {
             const data = await response.json();
-            console.log(data);
-            const accessToken = data.accessToken;
             
             return data;
           } else {
@@ -59,6 +58,10 @@ export const authOptions = {
       clientId: process.env.FACEBOOK_CLIENT_ID!,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
     }),
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID!,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET!,
+    })
   ],
   // secret: process.env.JWT_SECRET,
 };
@@ -74,17 +77,16 @@ const callbacks = {
       // eslint-disable-next-line no-param-reassign
       token = { ...token, ...user.data };
     }
-
     return token;
   },
   session: ({ session, token }: any) => {
-    // console.log(session);
+    
 
     if (token) {
       // eslint-disable-next-line no-param-reassign
       session = { ...session, user: token };
     }
-
+    // console.log(session);
     return session;
   },
 };
