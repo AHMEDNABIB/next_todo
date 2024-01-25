@@ -31,7 +31,7 @@ function TableTodo() {
 		
   return (
 		<>
-			<div className="overflow-x-auto w-full border-2 rounded-md border-zinc-200 ">
+			<div className="overflow-x-auto w-[900px] border-2 rounded-md border-zinc-200 ">
 				<div className="flex justify-between gap-6 mx-4 my-6 ">
 					<SearchTodo />
 					<PaginationTodo />
@@ -44,8 +44,8 @@ function TableTodo() {
 							<TableCell className="p-4 cursor-pointer peer">
 								<Checkbox checked={isChecked}  onChange={handleCheckboxChange} />
 							</TableCell>
-							< >
-								<TableCell onClick={() => setOpenModal(true)}  className="mr-24 whitespace-nowrap font-medium text-gray-900 dark:text-white ">
+							
+								<TableCell onClick={() => setOpenModal(true)}  className="whitespace-nowrap font-medium text-gray-900 dark:text-white mr-24 ">
 									<h1 className={`text-lg font-semibold cursor-pointer  ${isChecked ? 'line-through text-gray-500' : ''} `}>
 										hello world
 									</h1>
@@ -55,15 +55,14 @@ function TableTodo() {
 									
 									</p>
 								</TableCell>
-							</>
-								<TableCell className="flex justify-between gap-2">
-								  < >
+							
+								<TableCell className="flex justify-end pt-3 gap-2 mr-10" >
 									<TagsDropdownTodo />
 									<PriorityDropdownTodo/>
-								  </>
+								
 									
 								</TableCell>
-								<TableCell className={`cursor-pointer  ${isChecked ? 'line-through text-gray-500' : ''} `}>Jan, 17 2024</TableCell>
+								<TableCell className={`cursor-pointer  ${isChecked ? 'line-through text-gray-500 ' : ''} `}>Jan, 17 2024</TableCell>
 								<TableCell>
 									<Image
 										alt="Bonnie image"
@@ -83,6 +82,7 @@ function TableTodo() {
 					</TableBody>
 				</Table>
 			</div>
+
 
 			<Modal show={openModal} onClose={() => setOpenModal(false)}>
 				<ViewModalTodo/>
