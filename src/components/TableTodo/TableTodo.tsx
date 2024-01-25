@@ -22,10 +22,7 @@ import PriorityDropdownTodo from "@/components/TableTodo/TableListTodo/PriorityD
 
 
 
-import { useModal } from "@/context/ModalContext";
 
-
-type ValueType = string | number;
 
 
 function TableTodo({result, mutate}) {
@@ -35,26 +32,37 @@ function TableTodo({result, mutate}) {
 
 	const [openModal, setOpenModal] = useState(false);
 	
-	const [checked, setChecked] = useState([]);
+     const [checkedItems, setCheckedItems] = useState({});
 
-	const [record, setRecord] = useState({ })
+	const [record, setRecord] = useState({})
 
-	console.log(checked)
+	const [items, setItems] = useState([]);
+
+  const handleCheckboxChange = (id) => {
+    setCheckedItems(prevState => ({
+      ...prevState,
+      [id]: !prevState[id]
+    }));
+  };
+
+	
+	
+	
 
 	
 
-     const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
-			let updatedList = [...checked];
-			if (event.target.checked) {
-				updatedList = [...checked, event.target.value as ValueType];
-			} else {
-				updatedList.splice(checked.indexOf(event.target.value), 1);
-			}
-			setChecked(updatedList);
-		};
+    //  const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+	// 		let updatedList = [...checked];
+	// 		if (event.target.checked) {
+	// 			updatedList = [...checked, event.target.value as ValueType];
+	// 		} else {
+	// 			updatedList.splice(checked.indexOf(event.target.value), 1);
+	// 		}
+	// 		setChecked(updatedList);
+	// 	};
 
-	 const	isChecked = (item :boolean) =>
-		checked.includes(item) ? "line-through" : "";
+	//  const	isChecked = (item :boolean) =>
+	// 	checked.includes(item) ? "line-through" : "";
 	
 	
 	const  showDetail =  (id :string) => {
@@ -82,22 +90,22 @@ function TableTodo({result, mutate}) {
 					<TableBody className="divide-y divide-x">
 						{data.map((todo) => (
 							<TableRow
-								className="bg-white dark:border-gray-700 dark:bg-gray-800  "
+								// className="bg-white dark:border-gray-700 dark:bg-gray-800  "
+								className={checkedItems[todo._id] ? 'line-through' : ''}
+							
 								key={todo._id}>
 								<TableCell className="p-4 cursor-pointer peer">
 									<Checkbox
-										value={todo._id}
-										onChange={handleCheck}
+										checked={checkedItems[todo._id] || false}
+                                       onChange={() => handleCheckboxChange(todo._id)}
 									/>
 								</TableCell>
 
 								<TableCell
 									onClick={() => showDetail(todo._id)}
 									className="whitespace-nowrap font-medium text-gray-900 dark:text-white mr-24 ">
-									<h1 className={isChecked(todo._id)}>
-										{todo.title}
-									</h1>
-									<p className={isChecked(todo._id)}>
+									<h1>{todo.title}</h1>
+									<p>
 										{todo.description} Lorem ipsum dolor sit
 										amet consectetur adipisicing elit.
 										Reprehenderit neque,{" "}
@@ -105,14 +113,19 @@ function TableTodo({result, mutate}) {
 								</TableCell>
 
 								<TableCell className="flex justify-end gap-2 items-center mt-4">
-									<TagsDropdownTodo data={todo.tags} />
+									<TagsDropdownTodo
+										tags={todo.tags}
+										id={todo._id}
+										mutate={mutate}
+									/>
+
 									<PriorityDropdownTodo
-										data={todo.priority}
+										priority={todo.priority}
+										id={todo._id}
+										mutate={mutate}
 									/>
 								</TableCell>
-								<TableCell className={isChecked(todo._id)}>
-									Jan, 17 2024
-								</TableCell>
+								<TableCell>Jan, 17 2024</TableCell>
 
 								<TableCell>
 									<ActionDropdownTodo
