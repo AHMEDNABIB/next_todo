@@ -29,7 +29,7 @@ export const authOptions = {
 				}
 				try {
 					const response = await fetch(
-						"http://localhost:5000/api/user/login",
+						"http://localhost:3001/api/user/login",
 						{
 							method: "POST",
 							headers: {
