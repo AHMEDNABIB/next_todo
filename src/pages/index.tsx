@@ -18,29 +18,85 @@ const fetcher = (url: string) =>
 export default function Home() {
 
 	const [status, setStatus] = useState("inprogress");
+	 let [page, setPage] = useState(1);
 
-	console.log(status)
+	const PAGE_LIMIT = 6
 
-	const url = `http://localhost:3001/todos/status/${status}`;
-
-
-	const { data: result, mutate, error } = useSWR(url, fetcher);
+    const url = `http://localhost:3001/todos/status/${status}?page=${page}&limit=${PAGE_LIMIT}`;
 	
-	// console.log(result)
+	const { data: result, mutate, error } = useSWR(url, fetcher);
+
+    if (!result) {
+		return <p>Loading...</p>;
+	}
+
+	const totalPages = Math.ceil(result?.length / PAGE_LIMIT);
+
+	console.log(result)
+
+	if (result?.length === 0) {
+		page=0
+	}
+
+
+
+	
+	// console.log(totalPages)
+
+	// console.log(result.length > result.data.length);
+	// console.log(result.length, result.data.length)
+
+
+	
+  const handlePrevClick = () => {
+		if (page > 1) {
+			setPage((prevPage) => prevPage - 1);
+			mutate()
+		}
+  };
+
+  const handleNextClick = () => {
+		if (page < totalPages) {
+			setPage((prevPage) => prevPage + 1);
+			mutate();
+		}
+  };
+
+	const handleToggle = (id, isDone) => {
+	
+		  fetch(`localhost:3001/todos/done/${id}`, {
+	      method: "PATCH",
+	      headers: { "Content-Type": "application/json" },
+	      body: JSON.stringify({
+	        isDone
+	      }),
+	    })
+	    .then((res) => res.json())
+	    .then((data) => {
+	      console.log(data);
+	    });
+  
+  };
+ 
 
    if (error) {
 		return <p>Error: {error.message}</p>;
    }
 
-   if (!result) {
-		return <p>Loading...</p>;
-   }
 
   return (
 		<main>
 			<div className="flex gap-4 mt-4 ">
 				<SidebarTodo onStatusChange={setStatus} />
-				<TableTodo result={result} mutate={mutate} />
+				<TableTodo
+					result={result}
+					mutate={mutate}
+					handlePrevClick={handlePrevClick}
+					handleNextClick={handleNextClick}
+					page={page}
+					totalPages={totalPages}
+					onToggle={handleToggle}
+				/>
 			</div>
 		</main>
   );

@@ -7,6 +7,7 @@ import { FaRegTrashCan } from "react-icons/fa6";
 
 import { useState } from "react";
 import MainModal from "@/components/Common/Modal"
+import Swal from "sweetalert2";
 
 import CommonButton from "@/components/Common/Button"
 
@@ -42,6 +43,13 @@ export default function SidbarTodo({onStatusChange}) {
 			})
 				.then((res) => res.json())
 				.then((data) => {
+					Swal.fire({
+						position: "top-end",
+						icon: "success",
+						title: "Todo is Added",
+						showConfirmButton: false,
+						timer: 1500
+						});
 					console.log(data);
 				});
 			
@@ -54,7 +62,7 @@ export default function SidbarTodo({onStatusChange}) {
 			className=" mx-3 rounded-lg   border-2 bg-white border-gray-200 "
 			aria-label="Sidebar with content separator example">
 			<Sidebar.Items>
-				<div className="flex flex-col h-[600px] text-white">
+				<div className="flex flex-col h-[580px] text-white">
 					<Sidebar.ItemGroup>
 						<Sidebar.Item icon={FaClipboardList}>
 							TodoList
@@ -81,7 +89,7 @@ export default function SidbarTodo({onStatusChange}) {
 									Important
 								</div>
 							</Sidebar.Item>
-							<Sidebar.Item>
+							<Sidebar.Item  onClick={() => onStatusChange('trash')}>
 								<div className="flex gap-3 items-center">
 									<FaRegTrashCan />
 									Trash
@@ -218,9 +226,9 @@ export default function SidbarTodo({onStatusChange}) {
 									<div className="grid gap-4 mb-4 grid-cols-2">
 										<div className="col-span-2">
 											<label
-												htmlFor="name"
+												htmlFor="Title"
 												className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-												Name
+												Task Title
 											</label>
 											<input
 												type="text"
@@ -229,7 +237,7 @@ export default function SidbarTodo({onStatusChange}) {
                                                 onChange={handleChange}
 												id="name"
 												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-												placeholder="Type product name"
+												placeholder="Type task title"
 											/>
 										</div>
 										<div className="col-span-2 sm:col-span-1">
@@ -292,7 +300,7 @@ export default function SidbarTodo({onStatusChange}) {
 												onChange={handleChange}
 												name="description"
 												className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												placeholder="Write product description here"
+												placeholder="Write Your task description"
 												defaultValue={""}
 											/>
 										</div>
