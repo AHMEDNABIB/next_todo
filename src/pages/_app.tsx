@@ -7,7 +7,7 @@ import { Inter } from 'next/font/google'
 import { getServerSession } from 'next-auth';
 
 
-import SidebarTodo from "@/components/SidebarTodo/SidebarTodo"
+
 import { ModalProvider } from '@/context/ModalContext';
 
 const inter = Inter({ subsets: ['latin'] })
@@ -24,10 +24,9 @@ function App({ Component, pageProps }: AppProps) {
 		<SessionProvider session={pageProps.session}>
 			<div className={inter.className}>
 				<ModalProvider>
-					<div className="flex gap-4 mt-4 ">
-						{/* <SidebarTodo /> */}
+					
 						<Component {...pageProps} />
-					</div>
+					
 				</ModalProvider>
 			</div>
 		</SessionProvider>

@@ -4,14 +4,14 @@ import { Dropdown,Label,Select } from "flowbite-react";
 import React, { useState } from 'react';
 
 
-export default function DropdownTodo({priority,id, mutate}) {
+export default function DropdownTodo({priority,id, mutate}:any) {
 	// const [selectedOption, setSelectedOption] = useState(priority);
 
-	 const handleSelectOption = (option) => {
+	 const handleSelectOption = (option: any) => {
 			
 		 console.log(typeof(option))
 		 
-		 fetch(`http://localhost:5000/todos/priority/${id}`, {
+		 fetch(`http://localhost:3001/todos/priority/${id}`, {
 				method: "PATCH",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({

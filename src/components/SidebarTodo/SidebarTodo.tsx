@@ -10,11 +10,45 @@ import MainModal from "@/components/Common/Modal"
 
 import CommonButton from "@/components/Common/Button"
 
-import { useModal } from "@/context/ModalContext";
 
-export default function SidbarTodo() {
-	// const { openModal, setOpenModal } = useModal();
+
+export default function SidbarTodo({onStatusChange}) {
+
 	const [openModal, setOpenModal] = useState(false);
+
+	const [formData, setFormData] = useState({
+		title: "",
+		tags: "",
+		priority: "",
+		description: "",
+	});
+
+	// console.log(formData)
+
+	 const handleChange = (e) => {
+			setFormData({
+				...formData,
+				[e.target.name]: e.target.value,
+			});
+		};
+
+		const submitForm = (e) => {
+			e.preventDefault();
+
+		    fetch("http://localhost:3001/todos/", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(formData),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					console.log(data);
+				});
+			
+			setOpenModal((prev) => !prev);
+		};
+
+
 	return (
 		<Sidebar
 			className=" mx-3 rounded-lg   border-2 bg-white border-gray-200 "
@@ -27,21 +61,21 @@ export default function SidbarTodo() {
 						</Sidebar.Item>
 					</Sidebar.ItemGroup>
 
-					<div className="flex-1  overflow-hidden group py-4 hover:overflow-y-scroll transition-all duration-300  ">
+					<div className="flex-1 cursor-pointer   group py-4 overflow-hidden hover:overflow-y-scroll transition-all duration-300  ">
 						<Sidebar.ItemGroup>
-							<Sidebar.Item className="text-md">
+							<Sidebar.Item className="text-md"  onClick={() => onStatusChange('inprogress')} >
 								<div className="flex gap-3 items-center">
 									<BsListCheck />
 									Inbox
 								</div>
 							</Sidebar.Item>
-							<Sidebar.Item className="text-sm ">
+							<Sidebar.Item className="text-sm " onClick={() => onStatusChange('done')}>
 								<div className="flex gap-3 items-center">
 									<FaRegThumbsUp />
 									Done
 								</div>
 							</Sidebar.Item>
-							<Sidebar.Item>
+							<Sidebar.Item onClick={() => onStatusChange('important')}>
 								<div className="flex gap-3 items-center">
 									<FaRegStar />
 									Important
@@ -50,7 +84,7 @@ export default function SidbarTodo() {
 							<Sidebar.Item>
 								<div className="flex gap-3 items-center">
 									<FaRegTrashCan />
-									Done
+									Trash
 								</div>
 							</Sidebar.Item>
 						</Sidebar.ItemGroup>
@@ -180,7 +214,7 @@ export default function SidbarTodo() {
 								title="Add Todo"
 								show={openModal}
 								onClose={() => setOpenModal((prev) => !prev)}>
-								<form className="p-4 md:p-5">
+								<form className="p-4 md:p-5"  onSubmit={submitForm}>
 									<div className="grid gap-4 mb-4 grid-cols-2">
 										<div className="col-span-2">
 											<label
@@ -190,54 +224,59 @@ export default function SidbarTodo() {
 											</label>
 											<input
 												type="text"
-												name="name"
+												name="title"
+												value={formData.title}
+                                                onChange={handleChange}
 												id="name"
 												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 												placeholder="Type product name"
-												required=""
 											/>
 										</div>
 										<div className="col-span-2 sm:col-span-1">
 											<label
-												htmlFor="category"
+												htmlFor="tags"
 												className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Tag
 											</label>
 											<select
-												id="category"
+												id="tags"
+												value={formData.tags}
+												onChange={handleChange}
+												name="tags"
 												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 												<option selected="">
 													Select Tag
 												</option>
-												<option value="">TV</option>
-												<option value="PC">PC</option>
-												<option value="GA">
-													Gaming/Console
+												<option value="Team">
+													Team
 												</option>
-												<option value="PH">
-													Phones
+												<option value="Update">
+													Update
 												</option>
 											</select>
 										</div>
 										<div className="col-span-2 sm:col-span-1">
 											<label
-												htmlFor="category"
+												htmlFor="priority"
 												className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 												Priority
 											</label>
 											<select
-												id="category"
+												id="priority"
+												value={formData.priority}
+												onChange={handleChange}
+												name="priority"
 												className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 												<option selected="">
 													Select Priority
 												</option>
-												<option value="high">
+												<option value="High">
 													High
 												</option>
-												<option value="medium">
+												<option value="Medium">
 													Medium
 												</option>
-												<option value="low">Low</option>
+												<option value="Low">Low</option>
 											</select>
 										</div>
 										<div className="col-span-2">
@@ -249,6 +288,9 @@ export default function SidbarTodo() {
 											<textarea
 												id="description"
 												rows={4}
+												value={formData.description}
+												onChange={handleChange}
+												name="description"
 												className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 												placeholder="Write product description here"
 												defaultValue={""}
@@ -256,21 +298,15 @@ export default function SidbarTodo() {
 										</div>
 									</div>
 									<div className="flex justify-end gap-5 text-sm font-medium text-gray-500 dark:text-gray-300">
-										{/* <Button
-											onClick={() => setOpenModal(false)}
-											outline
-											gradientMonochrome="failure">
-											Cancel
-										</Button> */}
-
 										<CommonButton
 											onClick={() => setOpenModal(false)}
 											color="rose">
 											Cancel
 										</CommonButton>
-										
 
-										<Button gradientMonochrome="info">
+										<Button
+											gradientMonochrome="info"
+											type="submit">
 											Add
 										</Button>
 									</div>
