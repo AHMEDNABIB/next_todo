@@ -11,9 +11,13 @@ const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSignUp = async () => {
     try {
+      if( !name || !email || !password ){
+        setError('There was a problem with your submission. Please review  the fields above!')
+      }
         const response = await fetch('http://localhost:3001/api/user/register', {
           method: 'POST',
           headers: {
@@ -41,7 +45,7 @@ const SignUp = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 w-full">
       <div className="bg-white p-20 rounded shadow-md lg:w-2/5">
-        <h2 className="text-2xl font-bold mb-6 flex items-center justify-center">Create new account</h2>
+        <h2 className="text-2xl font-bold mb-6 flex items-center justify-center text-green-600">Create new account</h2>
         <form>
           <div className="mb-4">
             <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
@@ -85,6 +89,7 @@ const SignUp = () => {
               onChange={(e)=>setPassword(e.target.value)}
             /> 
           </div>
+          <div className="error-message text-red-500">{error}</div>
           <button
             type="submit"
             className="bg-green-400 text-white py-2 px-4 rounded-md hover:bg-green-500 w-full"
@@ -111,7 +116,7 @@ const SignUp = () => {
           <div className=" w-full border-gray-500 border py-2 px-4 rounded-md hover:border-gray-600 flex items-center justify-center">
           <button className="flex items-center" onClick={() => signIn('discord', { callbackUrl: '/' })}><FaDiscord className="mr-2 text-blue-600" /> Discord</button>
           </div>
-          <div className="mt-4 text-blue-500 hover:underline cursor-pointer">
+          <div className="mt-4 text-blue-500 hover:underline cursor-pointer text-green-600">
             <Link href="/login">already have an account?</Link>
           </div>
         </div>        
