@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { FaFacebook,FaDiscord } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 import Link from 'next/link';
+import AuthProviders from '@/components/AuthProvider/AuthProvider';
+
 
 const Login = () => {
   const router = useRouter();
@@ -113,25 +113,10 @@ const Login = () => {
             Login
           </button>
         </form>
-        <div className="mt-6 flex items-center">
-          <div className="flex-1 border-t-2 border-gray-400"></div>
-          <p className="mx-4 text-black-500">Log in with</p>
-          <div className="flex-1 border-t-2 border-gray-400"></div>
-        </div>
-        <div className="mt-6 flex flex-col items-center justify-between">
-          <div className=" w-full border-gray-500 border py-2 px-4 rounded-md hover:border-gray-600 flex items-center justify-center mb-2">
-          <button className="flex items-center" onClick={() => signIn('google', { callbackUrl: '/' })}><FcGoogle className="mr-2" /> Google</button>
-          </div>
-          <div className=" w-full border-gray-500 border py-2 px-4 rounded-md hover:border-gray-600 flex items-center justify-center mb-2">
-            <button className="flex items-center" onClick={() => signIn('facebook', { callbackUrl: '/' })}><FaFacebook className="mr-2 text-blue-500" /> Facebook</button>
-          </div>
-          <div className=" w-full border-gray-500 border py-2 px-4 rounded-md hover:border-gray-600 flex items-center justify-center">
-          <button className="flex items-center" onClick={() => signIn('discord', { callbackUrl: '/' })}><FaDiscord className="mr-2 text-blue-600" /> Discord</button>
-          </div>
-          <div className="mt-4 text-blue-500 hover:underline cursor-pointer text-green-600">
-            <Link href="/signup">create new account?</Link>
-          </div>
-        </div>        
+        <AuthProviders/>
+        <div className="mt-4 text-blue-500 hover:underline cursor-pointer text-green-600 flex items-center justify-center">
+          <Link href="/signup">create new account?</Link>
+        </div>      
       </div>
     </div>
 
