@@ -26,11 +26,20 @@ export default function DropdownTodo({priority,id, mutate}:any) {
 			mutate();
 			
 	};
-	
 
-	
+	const getColorByPriority = (priority) => {
+    switch (priority) {
+		
+		case "High":
+			return "red-600";
+		case "Medium":
+			return "green-600";
 
-	
+		default:
+			return "gray-600";
+	}
+  };
+		
 	return (
 		<>
 			<Dropdown
@@ -38,7 +47,12 @@ export default function DropdownTodo({priority,id, mutate}:any) {
 				// dismissOnClick={false}
 
 				renderTrigger={() => (
-					<span className="text-red-600 border text-semibold  text-xs  hover:bg-red-600 hover:text-white border-red-400 h-8 rounded-full px-3 py-2 cursor-pointer outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+					<span
+						className={`text-${getColorByPriority(
+							priority
+						)} border text-semibold text-xs hover:bg-${getColorByPriority(
+							priority
+						)} hover:text-white border-${getColorByPriority(priority)} h-8 rounded-full px-3 py-2 cursor-pointer outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}>
 						{priority}
 					</span>
 				)}>

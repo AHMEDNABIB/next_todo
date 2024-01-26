@@ -37,18 +37,7 @@ export default function Home() {
 	if (result?.length === 0) {
 		page=0
 	}
-
-
-
-	
-	// console.log(totalPages)
-
-	// console.log(result.length > result.data.length);
-	// console.log(result.length, result.data.length)
-
-
-	
-  const handlePrevClick = () => {
+const handlePrevClick = () => {
 		if (page > 1) {
 			setPage((prevPage) => prevPage - 1);
 			mutate()
