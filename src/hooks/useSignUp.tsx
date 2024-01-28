@@ -11,16 +11,16 @@ const useSignUp=  () => {
           if( !name || !email || !password ){
             setError('There was a problem with your submission. Please review  the fields above!')
           }
-            const response = await fetch('http://localhost:3001/api/user/register', {
-              method: 'POST',
-              headers: {
+            const response = await fetch(process.env.SIGNUP_API!, {
+                method: 'POST',
+                headers: {
                 'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
+                },
+                body: JSON.stringify({
                 name:name,
                 email:email,
                 password:password
-              }),
+                }),
             });
       
             if (response.ok) {

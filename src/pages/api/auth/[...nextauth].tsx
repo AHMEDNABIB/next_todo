@@ -29,7 +29,7 @@ export const authOptions = {
 				}
 				try {
 					const response = await fetch(
-						"http://localhost:3001/api/user/login",
+						process.env.LOGIN_API!,
 						{
 							method: "POST",
 							headers: {
