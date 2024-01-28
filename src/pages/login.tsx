@@ -1,54 +1,15 @@
 "use client";
-import React, { useState } from 'react';
-import { useSession, signIn } from 'next-auth/react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import AuthProviders from '@/components/AuthProvider/AuthProvider';
+import useLogin from '@/hooks/useLogin';
 
 
 const Login = () => {
   const router = useRouter();
-  const {data: session}=useSession();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [loginError, setLoginError] = useState('');
-
-
-
-  const handleLogin = async () => {
-    try {
-      if(!email || !password){
-        if (!email) {
-          setEmailError('Email is required');
-        }
-        if (!password) {
-          setPasswordError('Password is required');
-        }
-        return;
-      }
-      
-      const result = await signIn('credentials', {
-        redirect: false,
-        email,
-        password,
-      });
+  const { handleLogin,email, setEmail, password, setPassword, rememberMe, setRememberMe, emailError, passwordError, loginError} = useLogin();
   
-      if (result && !result.error) {
-        console.log('Login successful');
-        router.push('/');
-      } else {
-        setLoginError('Login failed!')
-        console.error('Login failed:', result?.error || 'Unknown error');
-      }
-    } catch (error) {
-      console.error('Error during login:', error);
-    }
-  };
-  
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 w-full">
       <div className="bg-white  p-20 rounded shadow-md lg:w-2/5">
@@ -107,7 +68,11 @@ const Login = () => {
             className="bg-green-400 text-white py-2 px-4 rounded-md hover:bg-green-500 w-full"
             onClick={(e)=>{
               e.preventDefault();
-              handleLogin();
+              handleLogin().then((result)=>{
+                if(result){
+                  router.push('/');
+                }
+              });
             }}
           >
             Login
