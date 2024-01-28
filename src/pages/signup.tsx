@@ -1,44 +1,13 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import AuthProviders from '@/components/AuthProvider/AuthProvider';
+import useSignUp from '@/hooks/useSignUp';
 
 const SignUp = () => {
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  const handleSignUp = async () => {
-    try {
-      if( !name || !email || !password ){
-        setError('There was a problem with your submission. Please review  the fields above!')
-      }
-        const response = await fetch('http://localhost:3001/api/user/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name:name,
-            email:email,
-            password:password
-          }),
-        });
-  
-        if (response.ok) {
-            router.push('/login');
-        } else {
-          console.error('Login failed');
-          return null;
-        }
-      } catch (error) {
-        console.error('Error during login:', error);
-        return null;
-      }
-  };
+  const { name, setName, email, setEmail, password, setPassword, error, handleSignUp } = useSignUp();
   
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 w-full">
@@ -93,7 +62,11 @@ const SignUp = () => {
             className="bg-green-400 text-white py-2 px-4 rounded-md hover:bg-green-500 w-full"
             onClick={(e)=>{
               e.preventDefault();
-              handleSignUp();
+              handleSignUp().then((result)=>{
+                if(result){
+                  router.push('/login');
+                }
+              });
             }}
           >
             Create Account
