@@ -3,7 +3,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import AuthProviders from '@/components/AuthProvider/AuthProvider';
-import useSignUp from '@/hooks/useSignUp';
+import useSignUp from '@/hooks/useUser';
 
 const SignUp = () => {
   const router = useRouter();
@@ -63,6 +63,7 @@ const SignUp = () => {
             onClick={(e)=>{
               e.preventDefault();
               handleSignUp().then((result)=>{
+                console.log(result);
                 if(result){
                   router.push('/login');
                 }

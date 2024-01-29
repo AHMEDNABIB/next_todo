@@ -29,7 +29,7 @@ export const authOptions = {
 				}
 				try {
 					const response = await fetch(
-						process.env.LOGIN_API!,
+						process.env.NEXT_PUBLIC_LOGIN_API!,
 						{
 							method: "POST",
 							headers: {

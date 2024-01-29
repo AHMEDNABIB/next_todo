@@ -1,14 +1,45 @@
-import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
-const useLogin = () => {
+
+const useUser=  () => {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [loginError, setLoginError] = useState('');
 
+    const handleSignUp = async () => {
+        try {
+          if( !name || !email || !password ){
+            setError('There was a problem with your submission. Please review  the fields above!')
+          }
+            const response = await fetch(process.env.NEXT_PUBLIC_SIGNUP_API!, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                name:name,
+                email:email,
+                password:password
+                }),
+            });
+      
+            if (response.ok) {
+                return response.json();
+            } else {
+              console.error('Login failed');
+              return null;
+            }
+          } catch (error) {
+            console.error('Error during login:', error);
+            return null;
+          }
+      };
     const handleLogin = async () => {
         try {
             if(!email || !password){
@@ -36,12 +67,16 @@ const useLogin = () => {
           } catch (error) {
             console.error('Error during login:', error);
           }
-    }
-    return {
+    }  
+      return {
+        name,
+        setName,
         email,
         setEmail,
         password,
         setPassword,
+        error,
+        handleSignUp,
         rememberMe,
         setRememberMe,
         emailError,
@@ -49,5 +84,5 @@ const useLogin = () => {
         loginError,
         handleLogin
     };
-}
-export default useLogin;
+};
+export default useUser;

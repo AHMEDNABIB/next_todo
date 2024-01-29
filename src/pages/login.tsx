@@ -3,7 +3,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import AuthProviders from '@/components/AuthProvider/AuthProvider';
-import useLogin from '@/hooks/useLogin';
+import useLogin from '@/hooks/useUser';
 
 
 const Login = () => {
