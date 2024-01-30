@@ -3,14 +3,14 @@ import { FieldValues, UseFormRegister } from 'react-hook-form'
 
 const InputArea = ({ 
     register,
-  required,
+  required=true,
   name,
   label,
-  type,
+  type='text',
   placeholder,
-  disabled,
+  disabled=false,
   id,
-  className
+  className=''
 }:{
     register:UseFormRegister<FieldValues>, 
     required?:boolean,
@@ -39,12 +39,6 @@ const InputArea = ({
     />
   </>
   )
-}
-
-InputArea.defaultValue={
-    required:true,
-    disable:false,
-    type:'text'
 }
 
 export default InputArea

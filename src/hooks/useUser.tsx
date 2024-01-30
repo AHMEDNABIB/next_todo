@@ -5,21 +5,16 @@ import { useRouter } from "next/router";
 
 
 const useUser=  () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
-    const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [loginError, setLoginError] = useState('');
     const {register, handleSubmit} = useForm();
     const router = useRouter();
 
-    const handleSignUp = async () => {
-        try {
+    const onSubmit:SubmitHandler<FieldValues> = async(data) =>{
+      const {email, password, name} = data;
+      try {
+        if(name){
+          
           if( !name || !email || !password ){
-            setError('There was a problem with your submission. Please review  the fields above!')
+            // setError('There was a problem with your submission. Please review  the fields above!')
           }
             const response = await fetch(process.env.NEXT_PUBLIC_SIGNUP_API!, {
                 method: 'POST',
@@ -34,89 +29,42 @@ const useUser=  () => {
             });
       
             if (response.ok) {
-                return response.json();
+              router.push('/login');
             } else {
               console.error('Login failed');
               return null;
             }
-          } catch (error) {
-            console.error('Error during login:', error);
-            return null;
-          }
-      };
-    const handleLogin = async () => {
-        try {
-            if(!email || !password){
-              if (!email) {
-                setEmailError('Email is required');
-              }
-              if (!password) {
-                setPasswordError('Password is required');
-              }
-              return;
+        }
+        else{
+          if(!email || !password){
+            if (!email) {
+              // setEmailError('Email is required');
             }
-            
-            const result = await signIn('credentials', {
-              redirect: false,
-              email,
-              password,
-            });
-        
-            if (result && !result.error) {
-              return result;
-            } else {
-              setLoginError('Login failed!')
-              console.error('Login failed:', result?.error || 'Unknown error');
+            if (!password) {
+              // setPasswordError('Password is required');
             }
-          } catch (error) {
-            console.error('Error during login:', error);
+            return;
           }
-    }  
-    const onSubmit:SubmitHandler<FieldValues> = async(data) =>{
-      const {email, password} = data;
-      try {
-        if(!email || !password){
-          if (!email) {
-            setEmailError('Email is required');
+          const result = await signIn('credentials', {
+            redirect: false,
+            email,
+            password,
+          });
+      
+          if (result && !result.error) {
+            router.push('/');
+            return result;
+          } else {
+            // setLoginError('Login failed!')
+            console.error('Login failed:', result?.error || 'Unknown error');
           }
-          if (!password) {
-            setPasswordError('Password is required');
-          }
-          return;
         }
         
-        const result = await signIn('credentials', {
-          redirect: false,
-          email,
-          password,
-        });
-    
-        if (result && !result.error) {
-          router.push('/');
-          return result;
-        } else {
-          setLoginError('Login failed!')
-          console.error('Login failed:', result?.error || 'Unknown error');
-        }
       } catch (error) {
         console.error('Error during login:', error);
       }
     }
       return {
-        name,
-        setName,
-        email,
-        setEmail,
-        password,
-        setPassword,
-        error,
-        handleSignUp,
-        rememberMe,
-        setRememberMe, 
-        emailError,
-        passwordError,
-        loginError,
-        handleLogin,
         register,
         onSubmit,
         handleSubmit
