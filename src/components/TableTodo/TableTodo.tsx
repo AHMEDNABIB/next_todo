@@ -2,91 +2,82 @@
 
 import {
 	Checkbox,
+	Modal,
 	Table,
 	TableBody,
 	TableCell,
 	TableRow,
-	Button,
-	Modal
 } from "flowbite-react";
 import { useState } from "react";
-import useSWR from "swr";
 
-
-import ActionDropdownTodo from "@/components/TableTodo/TableListTodo/ActionDropdownTodo"
-import SearchTodo from "@/components/TableTodo/TableHeader/SerarchTodo"
 import PaginationTodo from "@/components/TableTodo/TableHeader/PaginationTodo";
-import ViewModalTodo from "@/components/TableTodo/TableListTodo/ViewModalTodo"
-import TagsDropdownTodo from "@/components/TableTodo/TableListTodo/TagsDropdownTodo"
-import PriorityDropdownTodo from "@/components/TableTodo/TableListTodo/PriorityDropdownTodo"
+import SearchTodo from "@/components/TableTodo/TableHeader/SerarchTodo";
+import ActionDropdownTodo from "@/components/TableTodo/TableListTodo/ActionDropdownTodo";
+import PriorityDropdownTodo from "@/components/TableTodo/TableListTodo/PriorityDropdownTodo";
+import TagsDropdownTodo from "@/components/TableTodo/TableListTodo/TagsDropdownTodo";
+import ViewModalTodo from "@/components/TableTodo/TableListTodo/ViewModalTodo";
 
-
-
-
-
-
-function TableTodo({result, mutate}) {
-
-	
-	const { status, startTodo, endTodo, totalTodo, data } = result;
+function TableTodo({ result, mutate, handleNextClick, handlePrevClick , page,totalPages  }) {
+	const { data } = result;
 
 	const [openModal, setOpenModal] = useState(false);
-	
-     const [checkedItems, setCheckedItems] = useState([]);
 
-	const [record, setRecord] = useState({})
+	const [record, setRecord] = useState({});
 
 
-	const handleCheckboxChange = (id :string) => {
-		setCheckedItems(prevState => ({
-		...prevState,
-		[id]: !prevState[id]
+	const [checkedItems, setCheckedItems] = useState([]);
+
+	const handleCheckboxChange = (id: string) => {
+		setCheckedItems((prevState) => ({
+			...prevState,
+			[id]: !prevState[id],
 		}));
 
+		handleUpdateData(id);
+		};
+	// console.log(checkedItems);
+			const handleUpdateData = (id) => {
+			const status = checkedItems[id] ? "inprogress" : "done";
 
-		//  handleUpdateData(id);
-	};
+			fetch(`http://localhost:3001/todos/done/${id}`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+				status: status,
+				}),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+				console.log(data);
+				})
+				.catch((error) => {
+				console.error("Error updating data:", error);
+				});
+				mutate();
+			};
+				
 
-	console.log(checkedItems)
 
-
-
-// 	const handleUpdateData = (id) => {
-//     const option = checkedItems[id];
-
-//     fetch(`localhost:5000/todos/done/${id}`, {
-//       method: "PATCH",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         isDone: option,
-//       }),
-//     })
-//     .then((res) => res.json())
-//     .then((data) => {
-//       console.log(data);
-//     });
-//   };
-
-	
-	const  showDetail =  (id :string) => {
-		  fetch(`http://localhost:3001/todos/${id}`)
+	const showDetail = (id: string) => {
+		fetch(`http://localhost:3001/todos/${id}`)
 			.then((resposne) => resposne.json())
-			.then((res)=>setRecord(res.data))
+			.then((res) => setRecord(res.data));
 
 		setOpenModal(true);
-		
-			
-		
-		  
 	};
 
-		
-  return (
+	return (
 		<>
 			<div className="overflow-x-auto w-3/4 border-2 rounded-md border-zinc-200  cursor-pointer ">
-				<div className="flex justify-between gap-6 mx-4 my-6 ">
+				<div className="flex justify-between gap-6 mx-4 my-7 ">
 					<SearchTodo />
-					<PaginationTodo />
+					<PaginationTodo
+						handlePrevClick={handlePrevClick}
+						handleNextClick={handleNextClick}
+						page={page}
+						totalPages={totalPages}
+						mutate={mutate}
+					/>
 				</div>
 				<hr />
 				<Table
@@ -96,15 +87,14 @@ function TableTodo({result, mutate}) {
 					<TableBody className="divide-y divide-x ">
 						{data.map((todo) => (
 							<TableRow
-								// className="bg-white dark:border-gray-700 dark:bg-gray-800  "
-								className={
-									checkedItems[todo._id] ? "line-through" : ""
-								}
+								// className="  "
+
 								key={todo._id}>
 								<TableCell className="p-4 cursor-pointer peer">
 									<Checkbox
 										checked={
-											checkedItems[todo._id] || false
+											checkedItems[todo._id] ||
+											todo.status === "done"
 										}
 										onChange={() =>
 											handleCheckboxChange(todo._id)
@@ -114,7 +104,14 @@ function TableTodo({result, mutate}) {
 
 								<TableCell
 									onClick={() => showDetail(todo._id)}
-									className="whitespace-nowrap font-medium text-gray-900 dark:text-white  w-1/2 ">
+									className={
+										checkedItems[todo._id] ||
+										todo.status === "done"
+											? "line-through whitespace-nowrap font-medium text-gray-900 dark:text-white  w-1/2"
+											: "whitespace-nowrap font-medium text-gray-900 dark:text-white  w-1/2"
+									}
+									// className="whitespace-nowrap font-medium text-gray-900 dark:text-white  w-1/2 "
+								>
 									<h1>{todo.title}</h1>
 									<p>
 										{todo.description.length > 50
@@ -141,7 +138,15 @@ function TableTodo({result, mutate}) {
 										mutate={mutate}
 									/>
 								</TableCell>
-								<TableCell>Jan, 17 2024</TableCell>
+								<TableCell
+									className={
+										checkedItems[todo._id] ||
+										todo.status === "done"
+											? "line-through whitespace-nowrap font-medium text-gray-900 dark:text-white "
+											: "whitespace-nowrap font-medium text-gray-900 dark:text-white  "
+									}>
+									Jan, 17 2024
+								</TableCell>
 
 								<TableCell>
 									<ActionDropdownTodo
@@ -162,7 +167,7 @@ function TableTodo({result, mutate}) {
 				<ViewModalTodo data={record} />
 			</Modal>
 		</>
-  );
+	);
 }
 
-export default TableTodo
+export default TableTodo;
