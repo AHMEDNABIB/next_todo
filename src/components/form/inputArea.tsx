@@ -1,8 +1,8 @@
 import React from 'react'
-import { FieldValues, UseFormRegister } from 'react-hook-form'
+import { FieldValues, UseFormRegister } from 'react-hook-form';
 
 const InputArea = ({ 
-    register,
+  register,
   required=true,
   name,
   label,
@@ -10,7 +10,8 @@ const InputArea = ({
   placeholder,
   disabled=false,
   id,
-  className=''
+  className='',
+  error
 }:{
     register:UseFormRegister<FieldValues>, 
     required?:boolean,
@@ -21,6 +22,7 @@ const InputArea = ({
     disabled?:boolean,
     id:string,
     className?:string,
+    error?: FieldValues['message'] | undefined;
 }) => {
   return (
     <>
@@ -29,16 +31,17 @@ const InputArea = ({
     </label>
     <input
       {...register(name, {
-        required: required ? `${name} is required`  : false
+        required: required && `${name} is required`,
       })}
-      className={`${className} block text-gray-700 text-sm font-bold mb-2 w-full`}
+      className={`${className} block text-gray-700 text-sm font-bold mb-2 w-full rounded-lg`}
       type={type}
       id={id}
       placeholder={placeholder}
       disabled={disabled}
     />
+      {error && <div className="text-red-500">{error.message}</div>}
   </>
   )
 }
 
-export default InputArea
+export default InputArea;

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 
 const useUser=  () => {
-    const {register, handleSubmit} = useForm();
+    const {register, handleSubmit, formState} = useForm();
     const router = useRouter();
 
     const onSubmit:SubmitHandler<FieldValues> = async(data) =>{
@@ -67,7 +67,8 @@ const useUser=  () => {
       return {
         register,
         onSubmit,
-        handleSubmit
+        handleSubmit,
+        formState
     };
 };
 export default useUser;

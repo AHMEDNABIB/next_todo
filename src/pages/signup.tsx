@@ -6,7 +6,7 @@ import useUser from '@/hooks/useUser';
 import InputArea from '@/components/form/inputArea';
 
 const SignUp = () => {
-  const { handleSubmit,onSubmit,register} = useUser();
+  const { handleSubmit,onSubmit,register,formState} = useUser();
   
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 w-full">
@@ -19,6 +19,7 @@ const SignUp = () => {
             label='name'
             placeholder='Enter Name'
             id='name'
+            error={formState.errors.name}
           /> 
           <InputArea
             register={register}
@@ -27,6 +28,7 @@ const SignUp = () => {
             type='email'
             placeholder='Enter Email'
             id='email'
+            error={formState.errors.email}
           />
           <InputArea
             register={register}
@@ -35,6 +37,7 @@ const SignUp = () => {
             type='password'
             placeholder='Enter Password'
             id='password'
+            error={formState.errors.password}
           />
           <div className="error-message text-red-500">{}</div>
           <button
@@ -47,7 +50,7 @@ const SignUp = () => {
         <AuthProviders/>
         <div className="mt-4 text-blue-500 hover:underline cursor-pointer text-green-600 flex items-center justify-center">
           <Link href="/login">already have an account?</Link>
-        </div>     
+          </div>     
       </div>
     </div>
 
