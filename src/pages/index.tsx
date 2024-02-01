@@ -76,7 +76,7 @@ const handlePrevClick = () => {
   return (
 		<main>
 			<div className="flex gap-4 mt-4 ">
-				<SidebarTodo onStatusChange={setStatus} />
+				<SidebarTodo onStatusChange={setStatus} mutate={mutate} />
 				<TableTodo
 					result={result}
 					mutate={mutate}
