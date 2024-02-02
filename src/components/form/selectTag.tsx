@@ -8,6 +8,7 @@ const SelectTag = ({
     label,
     options,
     className,
+    value
 }:{
     register: UseFormRegister<FieldValues>;
     setValue: UseFormSetValue<FieldValues>;
@@ -15,6 +16,7 @@ const SelectTag = ({
     label: string;
     options: { value: string; label: string }[];
     className?: string;
+    value?: string
 }) => {
     return (
         <>
@@ -24,6 +26,7 @@ const SelectTag = ({
             <select
                 {...register(name)}
                 onChange={(e) => setValue(name, e.target.value)}
+                defaultValue={value}
                 className={`${className} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
             >
                 <option value="" disabled>

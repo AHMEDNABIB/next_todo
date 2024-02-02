@@ -10,17 +10,17 @@ const InputDescription = ({
     className,
     placeholder,
     rows=4,
-    defaultValue=""
+    value
 }:{
     register:UseFormRegister<FieldValues>, 
     required?:boolean,
     name:string,
     label:string,
     id:string,
-    placeholder:string,    
+    placeholder?:string,    
     className?:string,
     rows?:number,
-    defaultValue?:string
+    value?:string
 }) => {
     return (
         <>
@@ -35,7 +35,7 @@ const InputDescription = ({
             id={id}
             rows={rows}
             placeholder={placeholder}
-            defaultValue={defaultValue}
+            defaultValue={value}
             />
         </>
     )

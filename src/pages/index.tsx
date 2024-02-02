@@ -32,8 +32,6 @@ export default function Home() {
 
 	const totalPages = Math.ceil(result?.length / PAGE_LIMIT);
 
-	console.log(result)
-
 	if (result?.length === 0) {
 		page=0
 	}
