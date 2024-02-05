@@ -5,6 +5,7 @@ import SidebarTodo from "@/components/SidebarTodo/SidebarTodo";
 import useSWR, { mutate as swrMutate } from "swr";
 import fetcher from "../../services/requestUtils";
 import React, { useState } from "react";
+import Logout from "@/components/Logout/logout";
 
 export default function Home() {
   const [status, setStatus] = useState("inprogress");
@@ -55,7 +56,10 @@ console.log(result);
   return (
     <main>
       <div className="flex gap-4 mt-4 ">
-        <SidebarTodo onStatusChange={setStatus} mutate={mutate} />
+        <div>
+          <SidebarTodo onStatusChange={setStatus} mutate={mutate} />
+          <Logout/>
+        </div>
         <TableTodo
           result={result}
           mutate={mutate}
