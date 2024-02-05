@@ -1,13 +1,8 @@
 import { SessionProvider } from 'next-auth/react';
 import { AppProps } from 'next/app';
 import "@/styles/globals.css";
-
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { getServerSession } from 'next-auth';
-
-
-
 import { ModalProvider } from '@/context/ModalContext';
 
 const inter = Inter({ subsets: ['latin'] })

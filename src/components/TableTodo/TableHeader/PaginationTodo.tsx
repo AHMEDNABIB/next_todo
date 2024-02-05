@@ -1,6 +1,11 @@
 "use client";
 
-function PaginationTodo({ handleNextClick, handlePrevClick, page ,totalPages  }) {
+function PaginationTodo({ handleNextClick, handlePrevClick, page ,totalPages  }:{
+	handleNextClick: () => void
+	handlePrevClick: () => void
+	page: number
+	totalPages:number
+}) {
 	return (
 		<div className="items-center space-y-2 text-md sm:space-y-0 sm:space-x-3 sm:flex">
 			<span className="block">Page {page} of { totalPages }</span>

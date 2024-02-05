@@ -1,11 +1,10 @@
 "use client";
 
-import { Dropdown,Label,Select } from "flowbite-react";
-import React, { useState } from 'react';
+import { Dropdown } from "flowbite-react";
+import React from 'react';
 
 
 export default function DropdownTodo({priority,id, mutate}:any) {
-	// const [selectedOption, setSelectedOption] = useState(priority);
 
 	 const handleSelectOption = (option: any) => {
 			
@@ -27,7 +26,7 @@ export default function DropdownTodo({priority,id, mutate}:any) {
 			
 	};
 
-	const getColorByPriority = (priority) => {
+	const getColorByPriority = (priority:string) => {
     switch (priority) {
 		
 		case "High":
@@ -44,7 +43,6 @@ export default function DropdownTodo({priority,id, mutate}:any) {
 		<>
 			<Dropdown
 				label=""
-				// dismissOnClick={false}
 
 				renderTrigger={() => (
 					<span

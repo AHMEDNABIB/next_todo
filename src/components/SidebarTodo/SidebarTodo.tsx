@@ -196,6 +196,7 @@ export default function Sidb0arTodo({ onStatusChange, mutate }: sideBar) {
                 </svg>
                 Add New Task
               </Button>
+              {/* <Button>LOGOUT</Button> */}
               <MainModal
                 title="Add Todo"
                 show={openModal}

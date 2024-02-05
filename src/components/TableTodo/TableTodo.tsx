@@ -16,6 +16,24 @@ import PriorityDropdownTodo from "@/components/TableTodo/TableListTodo/PriorityD
 import TagsDropdownTodo from "@/components/TableTodo/TableListTodo/TagsDropdownTodo";
 import ViewModalTodo from "@/components/TableTodo/TableListTodo/ViewModalTodo";
 import { KeyedMutator } from "swr/_internal";
+import tableTodoUtils from './tableTodoUtils';
+const {handleUpdateData,showDetail} = tableTodoUtils()
+
+interface Todo {
+  _id: string;
+  createdAt: string;
+  description: string;
+  expired_at: string | null;
+  isDeleted: boolean;
+  isDone: boolean;
+  isImportant: boolean;
+  priority: string;
+  status: string;
+  tags: string;
+  title: string;
+  updatedAt: string;
+  __v: number;
+}
 
 interface tableTodo {
   result: any;
@@ -24,6 +42,8 @@ interface tableTodo {
   handlePrevClick: () => void;
   page: number;
   totalPages: number;
+  onToggle: (id: string, isDone: boolean) => void;
+
 }
 
 function TableTodo({
@@ -37,42 +57,14 @@ function TableTodo({
   const { data } = result;
   const [openModal, setOpenModal] = useState(false);
   const [record, setRecord] = useState({});
-  const [checkedItems, setCheckedItems] = useState([]);
+  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
 
   const handleCheckboxChange = (id: string) => {
     setCheckedItems((prevState) => ({
       ...prevState,
       [id]: !prevState[id],
     }));
-    handleUpdateData(id);
-  };
-
-  const handleUpdateData = (id) => {
-    const status = checkedItems[id] ? "inprogress" : "done";
-
-    fetch(`http://localhost:3001/todos/done/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        status: status,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error updating data:", error);
-      });
-    mutate();
-  };
-
-  const showDetail = (id: string) => {
-    fetch(`http://localhost:3001/todos/${id}`)
-      .then((resposne) => resposne.json())
-      .then((res) => setRecord(res.data));
-
-    setOpenModal(true);
+    handleUpdateData(id, checkedItems, mutate);
   };
 
   return (
@@ -85,13 +77,12 @@ function TableTodo({
             handleNextClick={handleNextClick}
             page={page}
             totalPages={totalPages}
-            mutate={mutate}
           />
         </div>
         <hr />
         <Table hoverable>
           <TableBody className="divide-y divide-x ">
-            {data.map((todo) => (
+            {data.map((todo: Todo) => (
               <TableRow key={todo._id}>
                 <TableCell className="p-4 cursor-pointer peer">
                   <Checkbox
@@ -101,7 +92,7 @@ function TableTodo({
                 </TableCell>
 
                 <TableCell
-                  onClick={() => showDetail(todo._id)}
+                  onClick={() => showDetail(todo._id, setRecord, setOpenModal, mutate)}
                   className={
                     checkedItems[todo._id] || todo.status === "done"
                       ? "line-through whitespace-nowrap font-medium text-gray-900 dark:text-white  w-1/2"
