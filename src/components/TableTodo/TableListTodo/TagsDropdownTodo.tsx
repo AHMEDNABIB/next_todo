@@ -1,15 +1,18 @@
 "use client";
 
-import { Dropdown, Label, Select } from "flowbite-react";
-import React, { useState } from "react";
+import { Dropdown } from "flowbite-react";
+import React from "react";
 
-export default function DropdownTodo({ tags, id, mutate }) {
-	// const [selectedOption, setSelectedOption] = useState(priority);
+export default function DropdownTodo({ tags, id, mutate }:{
+	tags: any;
+    id: any;
+    mutate: any;
+}) {
 
-	const handleSelectOption = (option) => {
+	const handleSelectOption = (option:any) => {
 		console.log(typeof option);
 
-		fetch(`http://localhost:5000/todos/tags/${id}`, {
+		fetch(`http://localhost:3001/todos/tags/${id}`, {
 			method: "PATCH",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -24,14 +27,25 @@ export default function DropdownTodo({ tags, id, mutate }) {
 		mutate();
 	};
 
+  const getColorByTag = (tags:any) => {
+    switch (tags) {
+      case "Team":
+        return "red-600";
+      case "Update":
+        return "green-600";
+      
+      default:
+        return "gray-600";
+    }
+  };
+
 	return (
 		<>
 			<Dropdown
 				label=""
-				// dismissOnClick={false}
 
 				renderTrigger={() => (
-					<span className="text-red-600 border text-semibold  text-xs  hover:bg-red-600 hover:text-white border-red-400 h-8 rounded-full px-3 py-2 cursor-pointer outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+					<span  className={`text-${getColorByTag(tags)} border text-semibold text-xs hover:bg-${getColorByTag(tags)} hover:text-white border-${getColorByTag(tags)} h-8 rounded-full px-3 py-2 cursor-pointer outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}>
 						{tags}
 					</span>
 				)}>

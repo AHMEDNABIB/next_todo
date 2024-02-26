@@ -1,14 +1,20 @@
 "use client";
 
-function PaginationTodo() {
+function PaginationTodo({ handleNextClick, handlePrevClick, page ,totalPages  }:{
+	handleNextClick: () => void
+	handlePrevClick: () => void
+	page: number
+	totalPages:number
+}) {
 	return (
-		<div
-			className="items-center space-y-2 text-md sm:space-y-0 sm:space-x-3 sm:flex">
-			<span className="block">Page 2 of 4</span>
+		<div className="items-center space-y-2 text-md sm:space-y-0 sm:space-x-3 sm:flex">
+			<span className="block">Page {page} of { totalPages }</span>
 			<div className="space-x-1">
 				<button
 					title="previous"
 					type="button"
+					onClick={handlePrevClick}
+					disabled={page === 1}
 					className="inline-flex items-center justify-center w-8 h-8 py-0 border rounded-md shadow">
 					<svg
 						viewBox="0 0 24 24"
@@ -24,6 +30,8 @@ function PaginationTodo() {
 				<button
 					title="next"
 					type="button"
+					onClick={handleNextClick}
+					disabled={page === totalPages}
 					className="inline-flex items-center justify-center w-8 h-8 py-0 border rounded-md shadow">
 					<svg
 						viewBox="0 0 24 24"
